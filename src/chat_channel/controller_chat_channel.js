@@ -226,13 +226,13 @@ const chat_channel_created = async (data) => {
 const chat_detail_controller=async(data)=>{
     try {
         const {chat_detail}=data;
-        console.log("chat detail "+JSON.stringify(chat_detail));
+        console.log("chat detail "+chat_detail);
         // const newUser= new chatdetail_model({
         //    "Detail":chat_detail.Detail,
         //    "chat_channel_user":chat_detail.chat_channel_user
         // });
         //saveDataInCustomCollection( chat_detail.chat_channel_user,chat_detail.Detail);
-        findOrCreateUserDetail(chat_detail.chat_channel_user,chat_detail.Detail);
+       return  findOrCreateUserDetail(chat_detail.chat_channel_user,chat_detail.Detail);
         
       
     
