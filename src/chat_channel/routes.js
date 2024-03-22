@@ -258,9 +258,7 @@ router.post('/page', async (req, res) => {
     try {
         
         const data = await fetchdataffunction(collection_name).find().skip((page - 1) * pageSize).limit(pageSize);
-
-       
-        res.json(data);
+    res.json(data);
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -400,18 +398,5 @@ router.delete("/delete_collection",async(req,res)=>{
     }
 })
 
-
-//rout
-
-
-// router.post("/login_chat_channel",async(req,res)=>{
-//     try {
-//         var chat={
-
-//         }
-//     } catch (error) {
-        
-//     }
-// })
 
 module.exports=router;
