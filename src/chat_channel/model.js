@@ -270,7 +270,7 @@ function createChatChannelModel(uniqueName, nameField, emailField){
 };
 
 // channel_detail
-function getModelForCollection(collectionName) {
+function detailcollection(collectionName) {
     const modelNames = mongoose.modelNames();
     if (modelNames.includes(collectionName)) {
         return mongoose.model(collectionName);
@@ -283,21 +283,21 @@ function getModelForCollection(collectionName) {
         return mongoose.model(collectionName, chatDetailSchema);
     }
 }
-async function findOrCreateUserDetail(collectionName, user) {
+async function findOrCreateUserDetail(collectionName, detail) {
     try {
         // Get the Mongoose model for the custom collection
-        const UserDetailModel = getModelForCollection(collectionName);
+        const UserDetailModel = detailcollection(collectionName);
         // Find user detail in the collection
         let existingUserDetail = await UserDetailModel.findOne({ Detail: { $ne: null } });
         if (!existingUserDetail) {
             // If user detail doesn't exist, create a new one
-            const newUserDetail = new UserDetailModel({ Detail: user });
+            const newUserDetail = new UserDetailModel({ Detail: detail });
             const createdUserDetail = await newUserDetail.save();
             console.log(`New user detail created in ${collectionName}:`, createdUserDetail);
             return createdUserDetail;
         } else {
             // If user detail exists, update it with the new detail
-            existingUserDetail.Detail = user;
+            existingUserDetail.Detail = detail;
             existingUserDetail = await existingUserDetail.save();
             console.log(`User detail updated in ${collectionName}:`, existingUserDetail);
             return existingUserDetail;
@@ -351,12 +351,10 @@ function activecollection(collectionName) {
 }
 
 ///muted function
-async function mutedfunctio(collectionName, id, mute,user_id) {
+async function mutedfunctio(collectionName, id, mute = false, user_id) {
     try {
-        
         const UserDetailModel = mutedcollection(collectionName);
 
-       
         const updatedDocument = await UserDetailModel.findOneAndUpdate(
             { "_id": user_id, "users._id": id }, 
             { "$set": { "users.$.mute": mute.toString() } }, 
@@ -370,10 +368,12 @@ async function mutedfunctio(collectionName, id, mute,user_id) {
 
         console.log(`Muted value updated for user with ID '${id}' to '${mute}'`);
         console.log("Updated document:", updatedDocument);
+        return updatedDocument;
     } catch (error) {
         console.error('Error finding or updating user detail:', error);
     }
 }
+
 //active statuds
 async function activefunctio(collectionName, id, active_status,user_id) {
     try {
@@ -394,6 +394,7 @@ async function activefunctio(collectionName, id, active_status,user_id) {
 
         console.log(`Muted value updated for user with ID '${id}' to '${active_status}'`);
         console.log("Updated document:", updatedDocument);
+        return updatedDocument;
     } catch (error) {
         console.error('Error finding or updating user detail:', error);
     }
