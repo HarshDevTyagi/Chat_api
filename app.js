@@ -1,15 +1,29 @@
 require("./database/database")
 
-const express=require("express");
-const bodyParser=express.json;
-const routes=require("./routes/index");
+const express = require("express");
+const bodyParser = require("body-parser"); // Correct import for bodyParser
+const routes = require("./routes/index");
+const rateLimit = require("express-rate-limit");
+
+const app = express();
 
 
-const app=express();
-app.use(bodyParser());
+const limiter = rateLimit({
+  windowMs:3000000, 
+  max: 100, 
+  message: 'Too many requests from this IP, please try again later.'
+});
 
-app.use("/formessage",routes);
-app.use("/chat",routes);
-app.use("/rectionat",routes)
+app.use(limiter);
 
-module.exports=app;
+
+app.use(bodyParser.json());
+
+
+app.use("/formessage", routes);
+app.use("/chat", routes);
+app.use("/rectionat", routes);
+
+
+
+module.exports = app;
